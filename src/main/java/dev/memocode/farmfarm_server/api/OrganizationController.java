@@ -37,7 +37,7 @@ public class OrganizationController {
 
     @PatchMapping("/{organizationId}")
     @Operation(summary = "조직 수정", description = "조직를 수정할 수 있습니다.")
-    public ResponseEntity<Void> updateHouse(@PathVariable UUID organizationId, @RequestBody UpdateOrganizationForm form) {
+    public ResponseEntity<Void> updateOrganization(@PathVariable UUID organizationId, @RequestBody UpdateOrganizationForm form) {
         UpdateOrganizationRequest request = UpdateOrganizationRequest.builder()
                 .organizationId(organizationId)
                 .name(form.getName())
@@ -50,7 +50,7 @@ public class OrganizationController {
 
     @DeleteMapping("/{organizationId}")
     @Operation(summary = "조직 삭제", description = "조직을 삭제할 수 있습니다.")
-    public ResponseEntity<Void> deleteHouse(@PathVariable UUID organizationId) {
+    public ResponseEntity<Void> deleteOrganization(@PathVariable UUID organizationId) {
         organizationService.deleteOrganization(organizationId);
 
         return ResponseEntity.noContent().build();
@@ -58,7 +58,7 @@ public class OrganizationController {
 
     @GetMapping
     @Operation(summary = "조직 전체 조회", description = "조직을 전체 조회할 수 있습니다.")
-    public ResponseEntity<FindAllOrganizationsResponse> findAllHouses() {
+    public ResponseEntity<FindAllOrganizationsResponse> findAllOrganizations() {
         FindAllOrganizationsResponse response = organizationService.findAllOrganizations();
 
         return ResponseEntity.ok(response);
@@ -66,7 +66,7 @@ public class OrganizationController {
 
     @GetMapping("/{organizationId}")
     @Operation(summary = "조직 단건 조회", description = "조직을 단건 조회할 수 있습니다.")
-    public ResponseEntity<FindOrganizationResponse> findHouse(@PathVariable UUID organizationId) {
+    public ResponseEntity<FindOrganizationResponse> findOrganization(@PathVariable UUID organizationId) {
         FindOrganizationResponse response = organizationService.findOrganization(organizationId);
 
         return ResponseEntity.ok(response);

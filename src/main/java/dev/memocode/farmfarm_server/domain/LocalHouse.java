@@ -17,18 +17,11 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @Table(name = "houses")
 @EqualsAndHashCode(callSuper = true)
-public class House extends IdentifiableSoftDeletableEntity {
+public class LocalHouse extends IdentifiableSoftDeletableEntity {
     @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "organization_id")
-    private Organization organization;
-
-    @OneToOne(mappedBy = "house", fetch = LAZY)
-    private LocalHouse localHouse;
-
-    public void changeName(String name) {
-        this.name = name;
-    }
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "house_id")
+    private House house;
 }
