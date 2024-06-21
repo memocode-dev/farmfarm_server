@@ -1,7 +1,13 @@
 package dev.memocode.farmfarm_server.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import dev.memocode.farmfarm_server.domain.base_entity.IdentifiableSoftDeletableEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -11,7 +17,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Table(name = "organizations")
 @EqualsAndHashCode(callSuper = true)
-public class Organization extends IdentifiableTimeManagementEntity {
-    @Column(name = "name")
+public class Organization extends IdentifiableSoftDeletableEntity {
+    @Column(name = "name", unique = true)
     private String name;
+
+    public void changeName(String name) {
+        this.name = name;
+    }
 }

@@ -1,0 +1,5 @@
+ALTER TABLE organizations
+    ADD COLUMN deleted BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE organizations
+    ADD COLUMN deleted_at TIMESTAMP WITH TIME ZONE;

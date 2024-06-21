@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateHouseRequest {
-    @NotBlank(message = "Name cannot be blank")
+    @NotBlank(message = "HOUSE_NAME_NOT_BLANK:Name cannot be blank")
     private String name;
 }

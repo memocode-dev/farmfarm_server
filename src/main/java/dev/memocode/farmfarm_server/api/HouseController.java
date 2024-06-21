@@ -1,10 +1,12 @@
 package dev.memocode.farmfarm_server.api;
 
 import dev.memocode.farmfarm_server.api.form.CreateHouseForm;
-import dev.memocode.farmfarm_server.domain.House;
+import dev.memocode.farmfarm_server.api.form.UpdateOrganizationForm;
 import dev.memocode.farmfarm_server.service.HouseService;
 import dev.memocode.farmfarm_server.service.request.CreateHouseRequest;
+import dev.memocode.farmfarm_server.service.request.UpdateHouseRequest;
 import dev.memocode.farmfarm_server.service.response.FindAllHousesResponse;
+import dev.memocode.farmfarm_server.service.response.FindHouseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,10 +35,39 @@ public class HouseController {
         return ResponseEntity.created(URI.create(houseId.toString())).body(houseId.toString());
     }
 
+    @PatchMapping("/{houseId}")
+    @Operation(summary = "하우스 수정", description = "하우스를 수정할 수 있습니다.")
+    public ResponseEntity<Void> updateHouse(@PathVariable UUID houseId, @RequestBody UpdateOrganizationForm form) {
+        UpdateHouseRequest request = UpdateHouseRequest.builder()
+                .houseId(houseId)
+                .name(form.getName())
+                .build();
+
+        houseService.updateHouse(request);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{houseId}")
+    @Operation(summary = "하우스 삭제", description = "하우스를 삭제할 수 있습니다.")
+    public ResponseEntity<Void> deleteHouse(@PathVariable UUID houseId) {
+        houseService.deleteHouse(houseId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     @Operation(summary = "하우스 전체 조회", description = "하우스를 전체 조회할 수 있습니다.")
     public ResponseEntity<FindAllHousesResponse> findAllHouses() {
         FindAllHousesResponse response = houseService.findAllHouses();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{houseId}")
+    @Operation(summary = "하우스 단건 조회", description = "하우스를 단건 조회할 수 있습니다.")
+    public ResponseEntity<FindHouseResponse> findHouse(@PathVariable UUID houseId) {
+        FindHouseResponse response = houseService.findHouse(houseId);
 
         return ResponseEntity.ok(response);
     }

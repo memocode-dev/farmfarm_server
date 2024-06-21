@@ -1,4 +1,4 @@
-package dev.memocode.farmfarm_server.domain;
+package dev.memocode.farmfarm_server.domain.base_entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
