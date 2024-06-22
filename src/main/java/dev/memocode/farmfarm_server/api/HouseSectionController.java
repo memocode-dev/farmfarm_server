@@ -75,7 +75,7 @@ public class HouseSectionController {
     }
 
     @PutMapping("/{houseSectionId}/sync")
-    @Operation(summary = "하우스 동기화", description = "하우스를 로컬서버에 동기화할 수 있습니다.")
+    @Operation(summary = "하우스동 동기화", description = "하우스동을 로컬서버에 동기화할 수 있습니다.")
     public ResponseEntity<Void> syncHouse(@PathVariable UUID houseId, @PathVariable UUID houseSectionId) {
         houseSectionService.syncHouseSection(houseId, houseSectionId);
 
