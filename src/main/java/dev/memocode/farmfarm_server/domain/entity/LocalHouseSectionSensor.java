@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
@@ -17,22 +18,33 @@ import static jakarta.persistence.FetchType.LAZY;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "local_houses")
+@Table(name = "local_house_section_sensors")
 @EqualsAndHashCode(callSuper = true)
-public class LocalHouse extends UUIDAbstractEntity {
-    @Column(name = "name")
-    private String name;
+public class LocalHouseSectionSensor extends UUIDAbstractEntity {
+    @Column(name = "name_for_admin")
+    private String nameForAdmin;
+
+    @Column(name = "name_for_user")
+    private String nameForUser;
 
     @Version
     @Column(name = "version", nullable = false)
     private Long version;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "house_id")
-    private House house;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "local_house_section_id")
+    private LocalHouseSection localHouseSection;
 
-    @Column(name = "house_version", nullable = false)
-    private Long houseVersion;
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "house_section_sensor_id", nullable = false)
+    private HouseSectionSensor houseSectionSensor;
+
+    @Column(name = "house_section_sensor_version", nullable = false)
+    private Long houseSectionSensorVersion;
+
+    @Enumerated(STRING)
+    @Column(name = "sensor_model")
+    private SensorModel sensorModel;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
@@ -49,12 +61,24 @@ public class LocalHouse extends UUIDAbstractEntity {
     @Column(name = "last_updated_at")
     private Instant lastUpdatedAt;
 
-    public void changeName(String name) {
-        this.name = name;
+    public void changeNameForAdmin(String nameForAdmin) {
+        this.nameForAdmin = nameForAdmin;
     }
 
-    public void changeHouseVersion(Long houseVersion) {
-        this.houseVersion = houseVersion;
+    public void changeNameForUser(String nameForUser) {
+        this.nameForUser = nameForUser;
+    }
+
+    public void changeHouseSectionSensorVersion(Long houseSectionSensorVersion) {
+        this.houseSectionSensorVersion = houseSectionSensorVersion;
+    }
+
+    public void changeLocalHouseSection(LocalHouseSection localHouseSection) {
+        this.localHouseSection = localHouseSection;
+    }
+
+    public void changeHouseSectionSensor(HouseSectionSensor houseSectionSensor) {
+        this.houseSectionSensor = houseSectionSensor;
     }
 
     public void changeCreatedAt(Instant createdAt) {

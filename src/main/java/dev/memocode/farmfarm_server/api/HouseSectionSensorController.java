@@ -33,6 +33,7 @@ public class HouseSectionSensorController {
                 .build();
 
         UUID houseSectionSensorId = houseSectionSensorService.createHouseSectionSensor(request);
+
         houseSectionSensorService.syncHouseSectionSensor(houseId, houseSectionId, houseSectionSensorId);
 
         return ResponseEntity.created(URI.create(houseSectionSensorId.toString())).body(houseSectionSensorId.toString());

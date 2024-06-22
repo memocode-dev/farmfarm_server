@@ -38,7 +38,7 @@ public class LocalHouseSection extends UUIDAbstractEntity {
     @Column(name = "house_section_version", nullable = false)
     private Long houseSectionVersion;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at", nullable = false)

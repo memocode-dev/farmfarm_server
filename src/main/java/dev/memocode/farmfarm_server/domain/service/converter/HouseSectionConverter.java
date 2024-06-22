@@ -22,6 +22,7 @@ public class HouseSectionConverter {
                         .sensorModelInfo(houseSectionSensor.getSensorModel().getModelInfo())
                         .createdAt(houseSectionSensor.getCreatedAt())
                         .updatedAt(houseSectionSensor.getUpdatedAt())
+                        .syncStatus(houseSectionSensor.getSyncStatus())
                         .build())
                 .toList();
 

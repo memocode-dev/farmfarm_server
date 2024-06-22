@@ -102,10 +102,10 @@ public class HouseSectionSensorService {
                 .nameForAdmin(houseSectionSensor.getNameForAdmin())
                 .nameForUser(houseSectionSensor.getNameForUser())
                 .sensorModel(houseSectionSensor.getSensorModel())
-                .createdAt(houseSection.getCreatedAt())
-                .updatedAt(houseSection.getUpdatedAt())
-                .deletedAt(houseSection.getDeletedAt())
-                .deleted(houseSection.getDeleted())
+                .createdAt(houseSectionSensor.getCreatedAt())
+                .updatedAt(houseSectionSensor.getUpdatedAt())
+                .deletedAt(houseSectionSensor.getDeletedAt())
+                .deleted(houseSectionSensor.getDeleted())
                 .build();
 
         Mqtt5Message message = Mqtt5Message.builder()

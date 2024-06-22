@@ -1,6 +1,7 @@
 package dev.memocode.farmfarm_server.domain.service.response;
 
 import dev.memocode.farmfarm_server.domain.entity.SensorModelInfo;
+import dev.memocode.farmfarm_server.domain.entity.SyncStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +21,5 @@ public class FindAllHouseSectionsResponse__HouseSectionSensor {
     private SensorModelInfo sensorModelInfo;
     private Instant createdAt;
     private Instant updatedAt;
+    private SyncStatus syncStatus;
 }

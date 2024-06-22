@@ -17,7 +17,7 @@ public class LocalHouseSectionController {
     private final LocalHouseSectionService localHouseSectionService;
 
     @MqttHandler(method = UPSERT, uri = "/localHouseSections")
-    public void upsertLocalHouse(@Mqtt5Body UpsertLocalHouseSectionRequest request) {
+    public void upsertLocalHouseSection(@Mqtt5Body UpsertLocalHouseSectionRequest request) {
         log.info("request: {}", request);
         localHouseSectionService.upsertLocalHouseSection(request);
     }

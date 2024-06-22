@@ -8,8 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Instant;
+
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 @Getter
 @Entity
@@ -34,7 +37,45 @@ public class HouseSectionSensor extends IdentifiableSoftDeletableEntity {
     @JoinColumn(name = "house_section_id")
     private HouseSection houseSection;
 
+    @OneToOne(mappedBy = "houseSectionSensor", fetch = LAZY)
+    private LocalHouseSectionSensor localHouseSectionSensor;
+
     @Version
     @Column(name = "version", nullable = false)
     private Long version;
+
+    public SyncStatus getSyncStatus() {
+        if (localHouseSectionSensorNotCreated()) {
+            return SyncStatus.NOT_CREATED;
+        }
+
+        if (isLocalHouseSectionSensorUnhealthy()) {
+            return SyncStatus.UNHEALTHY;
+        }
+
+        if (!areFieldsSynchronized()) {
+            return SyncStatus.UNHEALTHY;
+        }
+
+        return SyncStatus.HEALTHY;
+    }
+
+    private boolean localHouseSectionSensorNotCreated() {
+        return this.localHouseSectionSensor == null;
+    }
+
+    private boolean isLocalHouseSectionSensorUnhealthy() {
+        return this.localHouseSectionSensor.getLastUpdatedAt().isBefore(Instant.now().minus(20, MINUTES));
+    }
+
+    private boolean areFieldsSynchronized() {
+        return this.nameForAdmin.equals(this.localHouseSectionSensor.getNameForAdmin()) &&
+                this.nameForUser.equals(this.localHouseSectionSensor.getNameForUser()) &&
+                this.sensorModel.equals(this.localHouseSectionSensor.getSensorModel()) &&
+                this.version.equals(this.localHouseSectionSensor.getHouseSectionSensorVersion()) &&
+                this.getCreatedAt().equals(this.localHouseSectionSensor.getCreatedAt()) &&
+                this.getUpdatedAt().equals(this.localHouseSectionSensor.getUpdatedAt()) &&
+                this.getDeleted().equals(this.localHouseSectionSensor.getDeleted()) &&
+                (!this.getDeleted() || this.getDeletedAt().equals(this.localHouseSectionSensor.getDeletedAt()));
+    }
 }
