@@ -2,13 +2,12 @@ package dev.memocode.farmfarm_server.domain.entity;
 
 import dev.memocode.farmfarm_server.domain.base_entity.IdentifiableSoftDeletableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -35,6 +34,10 @@ public class HouseSection extends IdentifiableSoftDeletableEntity {
     @Version
     @Column(name = "version", nullable = false)
     private Long version;
+
+    @OneToMany(mappedBy = "houseSection")
+    @Builder.Default
+    private List<HouseSectionSensor> houseSectionSensors = new ArrayList<>();
 
     public void changeSectionNumber(Integer sectionNumber) {
         this.sectionNumber = sectionNumber;

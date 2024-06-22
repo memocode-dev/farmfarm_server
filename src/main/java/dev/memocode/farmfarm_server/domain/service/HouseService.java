@@ -23,9 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import java.util.UUID;
 
-import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.ALREADY_EXISTS_HOUSE_NAME;
-import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.NOT_FOUND_HOUSE;
-import static dev.memocode.farmfarm_server.domain.exception.HouseSectionErrorCode.NOT_HEALTHY_HOUSE;
+import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.*;
 import static dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Method.UPSERT;
 
 @Service
