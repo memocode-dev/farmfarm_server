@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static dev.memocode.farmfarm_server.api.exception.ApiErrorCode.VALIDATION_ERROR;
+import static dev.memocode.farmfarm_server.domain.exception.BaseErrorCode.VALIDATION_ERROR;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Slf4j
@@ -21,8 +21,8 @@ public class ApiExceptionController {
         log.error("{}", ex);
 
         ErrorResponse response = ErrorResponse.builder()
-                .code(ApiErrorCode.INTERNAL_SERVER_ERROR.getErrorCode())
-                .message(ApiErrorCode.INTERNAL_SERVER_ERROR.getDefaultMessage())
+                .code(BaseErrorCode.INTERNAL_SERVER_ERROR.getErrorCode())
+                .message(BaseErrorCode.INTERNAL_SERVER_ERROR.getDefaultMessage())
                 .build();
 
         return ResponseEntity.internalServerError().body(response);
@@ -97,7 +97,7 @@ public class ApiExceptionController {
     public ResponseEntity<ErrorResponse> constraintViolationException(ConstraintViolationException ex) {
         log.error("{}", ex);
         ConstraintViolation<?> constraintViolation = ex.getConstraintViolations().stream().findFirst()
-                .orElseThrow(() -> new InternalServerException(ApiErrorCode.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new InternalServerException(BaseErrorCode.INTERNAL_SERVER_ERROR));
         String message = constraintViolation.getMessage();
         try {
             ErrorResponse response = ErrorResponse.builder()

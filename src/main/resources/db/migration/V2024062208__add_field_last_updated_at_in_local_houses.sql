@@ -1,0 +1,2 @@
+ALTER TABLE local_houses
+    ADD COLUMN last_updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW();

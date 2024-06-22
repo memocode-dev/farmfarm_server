@@ -2,11 +2,11 @@ package dev.memocode.farmfarm_server.api;
 
 import dev.memocode.farmfarm_server.api.form.CreateOrganizationForm;
 import dev.memocode.farmfarm_server.api.form.UpdateOrganizationForm;
-import dev.memocode.farmfarm_server.service.OrganizationService;
-import dev.memocode.farmfarm_server.service.request.CreateOrganizationRequest;
-import dev.memocode.farmfarm_server.service.request.UpdateOrganizationRequest;
-import dev.memocode.farmfarm_server.service.response.FindAllOrganizationsResponse;
-import dev.memocode.farmfarm_server.service.response.FindOrganizationResponse;
+import dev.memocode.farmfarm_server.domain.service.OrganizationService;
+import dev.memocode.farmfarm_server.domain.service.request.CreateOrganizationRequest;
+import dev.memocode.farmfarm_server.domain.service.request.UpdateOrganizationRequest;
+import dev.memocode.farmfarm_server.domain.service.response.FindAllOrganizationsResponse;
+import dev.memocode.farmfarm_server.domain.service.response.FindOrganizationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

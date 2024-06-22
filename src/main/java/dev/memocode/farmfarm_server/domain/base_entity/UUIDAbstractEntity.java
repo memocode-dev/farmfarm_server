@@ -19,7 +19,6 @@ import java.util.UUID;
 @MappedSuperclass
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class UUIDAbstractEntity {
-
     @Id
     @EqualsAndHashCode.Include
     @Column(name = "id", updatable = false, nullable = false)

@@ -13,3 +13,12 @@ spring:
   flyway:
     locations: classpath:db/migration
     enabled: true
+
+custom:
+  aws:
+    iot:
+      endPoint: "${IOT_ENDPOINT:a16vfhk388057-ats.iot.ap-northeast-2.amazonaws.com}"
+      certificatePath: "${IOT_CERT_PATH:${user.dir}/auth/e997ace6397b2fc98c4f6a794e0ca0ee0f2504d608e5e0d4283a2b278eb5640d/certificate.pem.crt}"
+      privateKeyPath: "${IOT_PRIVATE_KEY_PATH:${user.dir}/auth/e997ace6397b2fc98c4f6a794e0ca0ee0f2504d608e5e0d4283a2b278eb5640d/private.pem.key}"
+  thing:
+    name: "${THING_NAME:greenhouse-management-system-local}"

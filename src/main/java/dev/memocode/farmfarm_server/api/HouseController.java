@@ -2,11 +2,11 @@ package dev.memocode.farmfarm_server.api;
 
 import dev.memocode.farmfarm_server.api.form.CreateHouseForm;
 import dev.memocode.farmfarm_server.api.form.UpdateOrganizationForm;
-import dev.memocode.farmfarm_server.service.HouseService;
-import dev.memocode.farmfarm_server.service.request.CreateHouseRequest;
-import dev.memocode.farmfarm_server.service.request.UpdateHouseRequest;
-import dev.memocode.farmfarm_server.service.response.FindAllHousesResponse;
-import dev.memocode.farmfarm_server.service.response.FindHouseResponse;
+import dev.memocode.farmfarm_server.domain.service.HouseService;
+import dev.memocode.farmfarm_server.domain.service.request.CreateHouseRequest;
+import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseRequest;
+import dev.memocode.farmfarm_server.domain.service.response.FindAllHousesResponse;
+import dev.memocode.farmfarm_server.domain.service.response.FindHouseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +44,7 @@ public class HouseController {
                 .build();
 
         houseService.updateHouse(request);
+        houseService.syncHouse(houseId);
 
         return ResponseEntity.noContent().build();
     }
@@ -52,6 +53,7 @@ public class HouseController {
     @Operation(summary = "하우스 삭제", description = "하우스를 삭제할 수 있습니다.")
     public ResponseEntity<Void> deleteHouse(@PathVariable UUID houseId) {
         houseService.deleteHouse(houseId);
+        houseService.syncHouse(houseId);
 
         return ResponseEntity.noContent().build();
     }
@@ -70,5 +72,13 @@ public class HouseController {
         FindHouseResponse response = houseService.findHouse(houseId);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{houseId}/sync")
+    @Operation(summary = "하우스 동기화", description = "하우스를 로컬서버에 동기화할 수 있습니다.")
+    public ResponseEntity<Void> syncHouse(@PathVariable UUID houseId) {
+        houseService.syncHouse(houseId);
+
+        return ResponseEntity.noContent().build();
     }
 }
