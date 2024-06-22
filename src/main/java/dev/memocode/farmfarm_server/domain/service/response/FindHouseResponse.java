@@ -1,6 +1,6 @@
 package dev.memocode.farmfarm_server.domain.service.response;
 
-import dev.memocode.farmfarm_server.domain.entity.HouseStatus;
+import dev.memocode.farmfarm_server.domain.entity.SyncStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,5 +18,5 @@ public class FindHouseResponse {
     private String name;
     private Instant createdAt;
     private Instant updatedAt;
-    private HouseStatus status;
+    private SyncStatus syncStatus;
 }

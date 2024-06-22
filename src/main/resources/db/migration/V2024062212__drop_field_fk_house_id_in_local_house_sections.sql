@@ -1,0 +1,2 @@
+ALTER TABLE local_house_sections
+DROP CONSTRAINT fk_local_house_sections__local_houses;

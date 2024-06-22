@@ -39,20 +39,20 @@ public class House extends IdentifiableSoftDeletableEntity {
         this.name = name;
     }
 
-    public HouseStatus getStatus() {
+    public SyncStatus getSyncStatus() {
         if (localHouseNotCreated()) {
-            return HouseStatus.NOT_CREATED;
+            return SyncStatus.NOT_CREATED;
         }
 
         if (isLocalHouseUnhealthy()) {
-            return HouseStatus.UNHEALTHY;
+            return SyncStatus.UNHEALTHY;
         }
 
         if (!areFieldsSynchronized()) {
-            return HouseStatus.UNHEALTHY;
+            return SyncStatus.UNHEALTHY;
         }
 
-        return HouseStatus.HEALTHY;
+        return SyncStatus.HEALTHY;
     }
 
     private boolean localHouseNotCreated() {

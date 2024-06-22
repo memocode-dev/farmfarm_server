@@ -1,6 +1,7 @@
 package dev.memocode.farmfarm_server.domain.service;
 
 import dev.memocode.farmfarm_server.domain.entity.House;
+import dev.memocode.farmfarm_server.domain.entity.SyncStatus;
 import dev.memocode.farmfarm_server.domain.exception.BusinessRuleViolationException;
 import dev.memocode.farmfarm_server.domain.exception.NotFoundException;
 import dev.memocode.farmfarm_server.domain.repository.HouseRepository;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.ALREADY_EXISTS_HOUSE_NAME;
 import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.NOT_FOUND_HOUSE;
+import static dev.memocode.farmfarm_server.domain.exception.HouseSectionErrorCode.NOT_HEALTHY_HOUSE;
 import static dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Method.UPSERT;
 
 @Service
@@ -62,6 +64,10 @@ public class HouseService {
         House house = houseRepository.findByIdAndDeleted(request.getHouseId(), false)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
 
+        if (house.getSyncStatus() != SyncStatus.HEALTHY) {
+            throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
+        }
+
         // 현재 하우스 이름이 아닌 경우
         if (!house.getName().equals(request.getName())) {
             // 중복 이름 검사
@@ -79,6 +85,10 @@ public class HouseService {
         // 하우스 조회
         House house = houseRepository.findByIdAndDeleted(houseId, false)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
+
+        if (house.getSyncStatus() != SyncStatus.HEALTHY) {
+            throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
+        }
 
         // 하우스 소프트 삭제
         house.softDelete();
@@ -101,7 +111,7 @@ public class HouseService {
                 .name(house.getName())
                 .createdAt(house.getCreatedAt())
                 .updatedAt(house.getUpdatedAt())
-                .status(house.getStatus())
+                .syncStatus(house.getSyncStatus())
                 .build();
     }
 

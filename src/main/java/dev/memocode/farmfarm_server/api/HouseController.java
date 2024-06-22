@@ -1,7 +1,7 @@
 package dev.memocode.farmfarm_server.api;
 
 import dev.memocode.farmfarm_server.api.form.CreateHouseForm;
-import dev.memocode.farmfarm_server.api.form.UpdateOrganizationForm;
+import dev.memocode.farmfarm_server.api.form.UpdateHouseForm;
 import dev.memocode.farmfarm_server.domain.service.HouseService;
 import dev.memocode.farmfarm_server.domain.service.request.CreateHouseRequest;
 import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseRequest;
@@ -37,7 +37,7 @@ public class HouseController {
 
     @PatchMapping("/{houseId}")
     @Operation(summary = "하우스 수정", description = "하우스를 수정할 수 있습니다.")
-    public ResponseEntity<Void> updateHouse(@PathVariable UUID houseId, @RequestBody UpdateOrganizationForm form) {
+    public ResponseEntity<Void> updateHouse(@PathVariable UUID houseId, @RequestBody UpdateHouseForm form) {
         UpdateHouseRequest request = UpdateHouseRequest.builder()
                 .houseId(houseId)
                 .name(form.getName())

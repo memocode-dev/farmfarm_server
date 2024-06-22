@@ -13,9 +13,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindAllHousesResponse__House {
+public class FindAllHouseSectionsResponse__HouseSection {
     private UUID id;
-    private String name;
+    private Integer sectionNumber;
     private Instant createdAt;
     private Instant updatedAt;
     private SyncStatus syncStatus;

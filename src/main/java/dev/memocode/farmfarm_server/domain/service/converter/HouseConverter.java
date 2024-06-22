@@ -15,7 +15,7 @@ public class HouseConverter {
                 .name(house.getName())
                 .createdAt(house.getCreatedAt())
                 .updatedAt(house.getUpdatedAt())
-                .status(house.getStatus())
+                .syncStatus(house.getSyncStatus())
                 .build();
     }
 
