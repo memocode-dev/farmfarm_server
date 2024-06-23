@@ -32,40 +32,45 @@ public class HouseSectionConverter {
                     Map<MeasurementType, FindAllHouseSectionsResponse__HouseSectionSensorMeasurement> measurements =
                             new HashMap<>();
 
-                    modelInfo.getMeasurementDetails()
-                            .forEach(measurementDetail -> {
-                                Optional<LocalHouseSectionSensorMeasurement> _measurement =
-                                        localHouseSectionSensorMeasurementRepository.
-                                                findTopByLocalHouseSectionSensorIdAndMeasurementTypeOrderByMeasuredAtDesc(
-                                                        houseSectionSensor.getLocalHouseSectionSensor().getId(),
-                                                        measurementDetail.getMeasurementType()
-                                                );
+                    if (houseSectionSensor.getLocalHouseSectionSensor() != null) {
+                        modelInfo.getMeasurementDetails()
+                                .forEach(measurementDetail -> {
+                                    Optional<LocalHouseSectionSensorMeasurement> _measurement =
+                                            localHouseSectionSensorMeasurementRepository.
+                                                    findTopByLocalHouseSectionSensorIdAndMeasurementTypeOrderByMeasuredAtDesc(
+                                                            houseSectionSensor.getLocalHouseSectionSensor().getId(),
+                                                            measurementDetail.getMeasurementType()
+                                                    );
 
-                                if (_measurement.isEmpty()) {
-                                    measurements.put(measurementDetail.getMeasurementType(),
-                                            FindAllHouseSectionsResponse__HouseSectionSensorMeasurement.builder()
-                                                    .measurementType(measurementDetail.getMeasurementType())
-                                                    .value(0f)
-                                                    .measuredAt(Instant.now())
-                                                    .syncStatus(SyncStatus.NOT_CREATED)
-                                                    .build());
-                                } else {
-                                    LocalHouseSectionSensorMeasurement measurement = _measurement.get();
-                                    measurements.put(measurement.getMeasurementType(),
-                                            FindAllHouseSectionsResponse__HouseSectionSensorMeasurement.builder()
-                                                    .measurementType(measurement.getMeasurementType())
-                                                    .value(measurement.getValue())
-                                                    .measuredAt(measurement.getMeasuredAt())
-                                                    .syncStatus(SyncStatus.HEALTHY)
-                                                    .build());
-                                }
-                            });
+                                    if (_measurement.isEmpty()) {
+                                        measurements.put(measurementDetail.getMeasurementType(),
+                                                FindAllHouseSectionsResponse__HouseSectionSensorMeasurement.builder()
+                                                        .measurementType(measurementDetail.getMeasurementType())
+                                                        .value(0f)
+                                                        .measuredAt(Instant.now())
+                                                        .syncStatus(SyncStatus.NOT_CREATED)
+                                                        .build());
+                                    } else {
+                                        LocalHouseSectionSensorMeasurement measurement = _measurement.get();
+                                        measurements.put(measurement.getMeasurementType(),
+                                                FindAllHouseSectionsResponse__HouseSectionSensorMeasurement.builder()
+                                                        .measurementType(measurement.getMeasurementType())
+                                                        .value(measurement.getValue())
+                                                        .measuredAt(measurement.getMeasuredAt())
+                                                        .syncStatus(SyncStatus.HEALTHY)
+                                                        .build());
+                                    }
+                                });
+                    }
+
+
 
                     return FindAllHouseSectionsResponse__HouseSectionSensor.builder()
                             .id(houseSectionSensor.getId())
                             .nameForAdmin(houseSectionSensor.getNameForAdmin())
                             .nameForUser(houseSectionSensor.getNameForUser())
                             .sensorModelInfo(houseSectionSensor.getSensorModel().getModelInfo())
+                            .portName(houseSectionSensor.getPortName())
                             .createdAt(houseSectionSensor.getCreatedAt())
                             .updatedAt(houseSectionSensor.getUpdatedAt())
                             .syncStatus(houseSectionSensor.getSyncStatus())

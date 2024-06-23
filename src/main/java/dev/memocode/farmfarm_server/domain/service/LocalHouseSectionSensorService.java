@@ -66,6 +66,7 @@ public class LocalHouseSectionSensorService {
             localHouseSectionSensor.changeLocalHouseSection(localHouseSection);
             localHouseSectionSensor.changeHouseSectionSensor(houseSectionSensor);
             localHouseSectionSensor.changeHouseSectionSensorVersion(request.getHouseSectionSensorVersion());
+            localHouseSectionSensor.changePortName(request.getPortName());
             localHouseSectionSensor.changeCreatedAt(request.getCreatedAt());
             localHouseSectionSensor.changeUpdatedAt(request.getUpdatedAt());
             localHouseSectionSensor.changeDeleted(request.getDeleted());
@@ -93,6 +94,7 @@ public class LocalHouseSectionSensorService {
                 .houseSectionSensor(houseSectionSensor)
                 .localHouseSection(localHouseSection)
                 .houseSectionSensorVersion(request.getHouseSectionSensorVersion())
+                .portName(request.getPortName())
                 .createdAt(request.getCreatedAt())
                 .updatedAt(request.getUpdatedAt())
                 .deleted(request.getDeleted())

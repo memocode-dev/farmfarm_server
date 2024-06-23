@@ -1,8 +1,10 @@
 package dev.memocode.farmfarm_server.api;
 
 import dev.memocode.farmfarm_server.api.form.CreateHouseSectionSensorForm;
+import dev.memocode.farmfarm_server.api.form.UpdateHouseSectionSensorForm;
 import dev.memocode.farmfarm_server.domain.service.HouseSectionSensorService;
 import dev.memocode.farmfarm_server.domain.service.request.CreateHouseSectionSensorRequest;
+import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseSectionSensorRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class HouseSectionSensorController {
                 .houseSectionId(houseSectionId)
                 .nameForAdmin(form.getNameForAdmin())
                 .nameForUser(form.getNameForUser())
+                .portName(form.getPortName())
                 .sensorModel(form.getSensorModel())
                 .build();
 
@@ -37,6 +40,29 @@ public class HouseSectionSensorController {
         houseSectionSensorService.syncHouseSectionSensor(houseId, houseSectionId, houseSectionSensorId);
 
         return ResponseEntity.created(URI.create(houseSectionSensorId.toString())).body(houseSectionSensorId.toString());
+    }
+
+    @PatchMapping("/{houseSectionSensorId}")
+    @Operation(summary = "하우스동 센서 수정", description = "하우스동 센서를 수정할 수 있습니다.")
+    public ResponseEntity<Void> updateHouseSectionSensor(
+            @PathVariable UUID houseId,
+            @PathVariable UUID houseSectionId,
+            @PathVariable UUID houseSectionSensorId,
+            @RequestBody UpdateHouseSectionSensorForm form) {
+        UpdateHouseSectionSensorRequest request = UpdateHouseSectionSensorRequest.builder()
+                .houseId(houseId)
+                .houseSectionId(houseSectionId)
+                .houseSectionSensorId(houseSectionSensorId)
+                .nameForAdmin(form.getNameForAdmin())
+                .nameForUser(form.getNameForUser())
+                .portName(form.getPortName())
+                .build();
+
+        houseSectionSensorService.updateHouseSectionSensor(request);
+
+        houseSectionSensorService.syncHouseSectionSensor(houseId, houseSectionId, houseSectionSensorId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{houseSectionSensorId}")

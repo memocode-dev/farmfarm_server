@@ -31,6 +31,9 @@ public class UpsertLocalHouseSectionSensorRequest {
     @NotNull(message = "HOUSE_SECTION_SENSOR_SENSOR_MODEL_NOT_NULL:house section sensor sensorModel cannot be not null")
     private SensorModel sensorModel;
 
+    @NotNull(message = "HOUSE_SECTION_SENSOR_PORT_NAME_NOT_NULL:house section sensor portName cannot be not null")
+    private String portName;
+
     @NotNull(message = "HOUSE_SECTION_SENSOR_VERSION_NOT_NULL:house version cannot be not null")
     private Long houseSectionSensorVersion;
 

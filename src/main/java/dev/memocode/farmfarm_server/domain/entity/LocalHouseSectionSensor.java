@@ -103,4 +103,8 @@ public class LocalHouseSectionSensor extends UUIDAbstractEntity {
     public void changeLastUpdatedAt(Instant lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
     }
+
+    public void changePortName(String portName) {
+        this.portName = portName;
+    }
 }

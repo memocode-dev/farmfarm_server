@@ -11,12 +11,15 @@ import dev.memocode.farmfarm_server.domain.repository.HouseSectionRepository;
 import dev.memocode.farmfarm_server.domain.repository.HouseSectionSensorRepository;
 import dev.memocode.farmfarm_server.domain.service.request.CreateHouseSectionSensorRequest;
 import dev.memocode.farmfarm_server.domain.service.request.SyncHouseSectionSensorRequest;
+import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseSectionSensorRequest;
 import dev.memocode.farmfarm_server.mqtt.config.MqttSender;
 import dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Message;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -30,6 +33,7 @@ import static dev.memocode.farmfarm_server.domain.exception.HouseSectionSensorEr
 import static dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Method.UPSERT;
 
 @Service
+@Validated
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HouseSectionSensorService {
@@ -42,7 +46,7 @@ public class HouseSectionSensorService {
     private final MqttSender mqttSender;
 
     @Transactional
-    public UUID createHouseSectionSensor(CreateHouseSectionSensorRequest request) {
+    public UUID createHouseSectionSensor(@Valid CreateHouseSectionSensorRequest request) {
         House house = houseRepository.findByIdAndDeleted(request.getHouseId(), false)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
 
@@ -62,6 +66,7 @@ public class HouseSectionSensorService {
                 .nameForUser(request.getNameForUser())
                 .sensorModel(request.getSensorModel())
                 .houseSection(houseSection)
+                .portName(request.getPortName())
                 .build();
 
         houseSectionSensorRepository.save(houseSectionSensor);
@@ -103,6 +108,7 @@ public class HouseSectionSensorService {
                 .nameForAdmin(houseSectionSensor.getNameForAdmin())
                 .nameForUser(houseSectionSensor.getNameForUser())
                 .sensorModel(houseSectionSensor.getSensorModel())
+                .portName(houseSectionSensor.getPortName())
                 .createdAt(houseSectionSensor.getCreatedAt())
                 .updatedAt(houseSectionSensor.getUpdatedAt())
                 .deletedAt(houseSectionSensor.getDeletedAt())
@@ -167,5 +173,46 @@ public class HouseSectionSensorService {
                 .build();
 
         mqttSender.send("request/%s".formatted(house.getId().toString()), message);
+    }
+
+    @Transactional
+    public void updateHouseSectionSensor(@Valid UpdateHouseSectionSensorRequest request) {
+        House house = houseRepository.findByIdAndDeleted(request.getHouseId(), false)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
+
+        if (house.getSyncStatus() != SyncStatus.HEALTHY) {
+            throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
+        }
+
+        HouseSection houseSection = houseSectionRepository.findByIdAndDeleted(request.getHouseSectionId(), false)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION));
+
+        if (!houseSection.getHouse().equals(house)) {
+            throw new BusinessRuleViolationException(INVALID_HOUSE_SECTION_RELATION);
+        }
+
+        if (houseSection.getSyncStatus() != SyncStatus.HEALTHY) {
+            throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE_SECTION);
+        }
+
+        HouseSectionSensor houseSectionSensor =
+                houseSectionSensorRepository.findByIdAndDeleted(request.getHouseSectionSensorId(), false)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION_SENSOR));
+
+        if (!houseSectionSensor.getHouseSection().equals(houseSection)) {
+            throw new BusinessRuleViolationException(INVALID_HOUSE_SECTION_SENSOR_RELATION);
+        }
+
+        if (request.getPortName() != null) {
+            houseSectionSensor.changePortName(request.getPortName());
+        }
+
+        if (request.getNameForAdmin() != null) {
+            houseSectionSensor.changeNameForAdmin(request.getNameForAdmin());
+        }
+
+        if (request.getNameForUser() != null) {
+            houseSectionSensor.changeNameForUser(request.getNameForUser());
+        }
     }
 }

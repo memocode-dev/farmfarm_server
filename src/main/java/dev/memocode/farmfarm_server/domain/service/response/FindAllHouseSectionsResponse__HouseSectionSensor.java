@@ -21,6 +21,7 @@ public class FindAllHouseSectionsResponse__HouseSectionSensor {
     private String nameForAdmin;
     private String nameForUser;
     private SensorModelInfo sensorModelInfo;
+    private String portName;
     private Instant createdAt;
     private Instant updatedAt;
     private SyncStatus syncStatus;

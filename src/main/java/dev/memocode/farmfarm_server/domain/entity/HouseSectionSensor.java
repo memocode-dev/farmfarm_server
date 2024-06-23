@@ -81,4 +81,16 @@ public class HouseSectionSensor extends IdentifiableSoftDeletableEntity {
                 this.getDeleted().equals(this.localHouseSectionSensor.getDeleted()) &&
                 (!this.getDeleted() || this.getDeletedAt().equals(this.localHouseSectionSensor.getDeletedAt()));
     }
+
+    public void changePortName(String portName) {
+        this.portName = portName;
+    }
+
+    public void changeNameForAdmin(String nameForAdmin) {
+        this.nameForAdmin = nameForAdmin;
+    }
+
+    public void changeNameForUser(String nameForUser) {
+        this.nameForUser = nameForUser;
+    }
 }
