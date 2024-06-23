@@ -17,7 +17,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "local_houses")
+@Table(name = "local_houses", uniqueConstraints = @UniqueConstraint(columnNames = "house"))
 @EqualsAndHashCode(callSuper = true)
 public class LocalHouse extends UUIDAbstractEntity {
     @Column(name = "name")
@@ -28,7 +28,7 @@ public class LocalHouse extends UUIDAbstractEntity {
     private Long version;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "house_id")
+    @JoinColumn(name = "house_id", unique = true)
     private House house;
 
     @Column(name = "house_version", nullable = false)

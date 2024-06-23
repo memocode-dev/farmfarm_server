@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -101,7 +102,24 @@ public class HouseSectionService {
             throw new BusinessRuleViolationException(INVALID_HOUSE_SECTION_RELATION);
         }
 
-        houseSection.softDelete();
+        SyncHouseSectionRequest request = SyncHouseSectionRequest.builder()
+                .houseId(house.getId())
+                .houseSectionId(houseSection.getId())
+                .houseSectionVersion(houseSection.getVersion())
+                .sectionNumber(houseSection.getSectionNumber())
+                .createdAt(houseSection.getCreatedAt())
+                .updatedAt(houseSection.getUpdatedAt())
+                .deletedAt(Instant.now())
+                .deleted(true)
+                .build();
+
+        Mqtt5Message message = Mqtt5Message.builder()
+                .method(UPSERT)
+                .uri("/localHouseSections")
+                .data(request)
+                .build();
+
+        mqttSender.send("request/%s".formatted(house.getId().toString()), message);
     }
 
     public FindAllHouseSectionsResponse findAllHouseSections(

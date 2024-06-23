@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static dev.memocode.farmfarm_server.domain.entity.SyncStatus.HEALTHY;
@@ -72,22 +73,22 @@ public class HouseSectionSensorService {
             @NotNull(message = "HOUSE_ID_NOT_NULL:house id cannot be null") UUID houseId,
             @NotNull(message = "HOUSE_SECTION_ID_NOT_NULL:house section id cannot be null") UUID houseSectionId,
             @NotNull(message = "HOUSE_SECTION_SENSOR_ID_NOT_NULL:house id cannot be null") UUID houseSectionSensorId
-            ) {
-        House house = houseRepository.findByIdAndDeleted(houseId, false)
+    ) {
+        House house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
 
         if (house.getSyncStatus() != SyncStatus.HEALTHY) {
             throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
         }
 
-        HouseSection houseSection = houseSectionRepository.findByIdAndDeleted(houseSectionId, false)
+        HouseSection houseSection = houseSectionRepository.findById(houseSectionId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION));
 
         if (!houseSection.getHouse().equals(house)) {
             throw new BusinessRuleViolationException(INVALID_HOUSE_SECTION_RELATION);
         }
 
-        HouseSectionSensor houseSectionSensor = houseSectionSensorRepository.findByIdAndDeleted(houseSectionSensorId, false)
+        HouseSectionSensor houseSectionSensor = houseSectionSensorRepository.findById(houseSectionSensorId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION_SENSOR));
 
         if (!houseSectionSensor.getHouseSection().equals(houseSection)) {
@@ -106,6 +107,57 @@ public class HouseSectionSensorService {
                 .updatedAt(houseSectionSensor.getUpdatedAt())
                 .deletedAt(houseSectionSensor.getDeletedAt())
                 .deleted(houseSectionSensor.getDeleted())
+                .build();
+
+        Mqtt5Message message = Mqtt5Message.builder()
+                .method(UPSERT)
+                .uri("/localHouseSectionSensors")
+                .data(request)
+                .build();
+
+        mqttSender.send("request/%s".formatted(house.getId().toString()), message);
+    }
+
+    @Transactional
+    public void deleteHouseSectionSensor(UUID houseId, UUID houseSectionId, UUID houseSectionSensorId) {
+        House house = houseRepository.findByIdAndDeleted(houseId, false)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
+
+        if (house.getSyncStatus() != SyncStatus.HEALTHY) {
+            throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
+        }
+
+        HouseSection houseSection = houseSectionRepository.findByIdAndDeleted(houseSectionId, false)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION));
+
+        if (!houseSection.getHouse().equals(house)) {
+            throw new BusinessRuleViolationException(INVALID_HOUSE_SECTION_RELATION);
+        }
+
+        if (houseSection.getSyncStatus() != SyncStatus.HEALTHY) {
+            throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE_SECTION);
+        }
+
+        HouseSectionSensor houseSectionSensor =
+                houseSectionSensorRepository.findByIdAndDeleted(houseSectionSensorId, false)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION_SENSOR));
+
+        if (!houseSectionSensor.getHouseSection().equals(houseSection)) {
+            throw new BusinessRuleViolationException(INVALID_HOUSE_SECTION_SENSOR_RELATION);
+        }
+
+        SyncHouseSectionSensorRequest request = SyncHouseSectionSensorRequest.builder()
+                .houseId(house.getId())
+                .houseSectionId(houseSection.getId())
+                .houseSectionSensorId(houseSectionSensor.getId())
+                .houseSectionSensorVersion(houseSectionSensor.getVersion())
+                .nameForAdmin(houseSectionSensor.getNameForAdmin())
+                .nameForUser(houseSectionSensor.getNameForUser())
+                .sensorModel(houseSectionSensor.getSensorModel())
+                .createdAt(houseSectionSensor.getCreatedAt())
+                .updatedAt(houseSectionSensor.getUpdatedAt())
+                .deletedAt(Instant.now())
+                .deleted(true)
                 .build();
 
         Mqtt5Message message = Mqtt5Message.builder()

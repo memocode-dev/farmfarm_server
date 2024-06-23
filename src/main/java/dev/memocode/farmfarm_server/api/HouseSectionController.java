@@ -57,17 +57,15 @@ public class HouseSectionController {
     }
 
     @DeleteMapping("/{houseSectionId}")
-    @Operation(summary = "하우스 삭제", description = "하우스를 삭제할 수 있습니다.")
+    @Operation(summary = "하우스동 삭제", description = "하우스동을 삭제할 수 있습니다.")
     public ResponseEntity<Void> deleteHouseSection(@PathVariable UUID houseId, @PathVariable UUID houseSectionId) {
         houseSectionService.deleteHouseSection(houseId, houseSectionId);
-
-        houseSectionService.syncHouseSection(houseId, houseSectionId);
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    @Operation(summary = "하우스동 전체 조회", description = "하우스를 전체 조회할 수 있습니다.")
+    @Operation(summary = "하우스동 전체 조회", description = "하우스동을 전체 조회할 수 있습니다.")
     public ResponseEntity<FindAllHouseSectionsResponse> findAllHouseSections(@PathVariable UUID houseId) {
         FindAllHouseSectionsResponse response = houseSectionService.findAllHouseSections(houseId);
 
@@ -76,7 +74,7 @@ public class HouseSectionController {
 
     @PutMapping("/{houseSectionId}/sync")
     @Operation(summary = "하우스동 동기화", description = "하우스동을 로컬서버에 동기화할 수 있습니다.")
-    public ResponseEntity<Void> syncHouse(@PathVariable UUID houseId, @PathVariable UUID houseSectionId) {
+    public ResponseEntity<Void> syncHouseSection(@PathVariable UUID houseId, @PathVariable UUID houseSectionId) {
         houseSectionService.syncHouseSection(houseId, houseSectionId);
 
         return ResponseEntity.noContent().build();

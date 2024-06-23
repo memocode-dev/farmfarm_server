@@ -18,7 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "local_house_section_sensors")
+@Table(name = "local_house_section_sensors", uniqueConstraints = @UniqueConstraint(columnNames = "houseSectionSensor"))
 @EqualsAndHashCode(callSuper = true)
 public class LocalHouseSectionSensor extends UUIDAbstractEntity {
     @Column(name = "name_for_admin")
@@ -36,7 +36,7 @@ public class LocalHouseSectionSensor extends UUIDAbstractEntity {
     private LocalHouseSection localHouseSection;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "house_section_sensor_id", nullable = false)
+    @JoinColumn(name = "house_section_sensor_id", nullable = false, unique = true)
     private HouseSectionSensor houseSectionSensor;
 
     @Column(name = "house_section_sensor_version", nullable = false)
@@ -45,6 +45,9 @@ public class LocalHouseSectionSensor extends UUIDAbstractEntity {
     @Enumerated(STRING)
     @Column(name = "sensor_model")
     private SensorModel sensorModel;
+
+    @Column(name = "port_name")
+    private String portName;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

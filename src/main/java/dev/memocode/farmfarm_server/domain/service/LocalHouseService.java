@@ -30,6 +30,12 @@ public class LocalHouseService {
         localHouseRepository.findByHouseId(request.getHouseId())
                 .map(existingLocalHouse -> updateLocalHouseIfNecessary(existingLocalHouse, request))
                 .orElseGet(() -> createLocalHouse(request));
+
+        if (request.getDeleted()) {
+            House house = houseRepository.findById(request.getHouseId())
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
+            house.softDelete(request.getDeletedAt());
+        }
     }
 
     private LocalHouse updateLocalHouseIfNecessary(LocalHouse localHouse, UpsertLocalHouseRequest request) {

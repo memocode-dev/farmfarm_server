@@ -53,7 +53,6 @@ public class HouseController {
     @Operation(summary = "하우스 삭제", description = "하우스를 삭제할 수 있습니다.")
     public ResponseEntity<Void> deleteHouse(@PathVariable UUID houseId) {
         houseService.deleteHouse(houseId);
-        houseService.syncHouse(houseId);
 
         return ResponseEntity.noContent().build();
     }

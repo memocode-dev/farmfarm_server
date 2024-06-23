@@ -26,7 +26,9 @@ import static dev.memocode.farmfarm_server.domain.exception.LocalHouseSectionErr
 @RequiredArgsConstructor
 public class LocalHouseSectionSensorService {
     private final HouseSectionSensorRepository houseSectionSensorRepository;
+
     private final LocalHouseSectionSensorRepository localHouseSectionSensorRepository;
+
     private final LocalHouseSectionRepository localHouseSectionRepository;
 
     @Transactional
@@ -39,6 +41,13 @@ public class LocalHouseSectionSensorService {
             updateLocalHouseSectionSensorIfNecessary(localHouseSectionSensor, request);
         } else {
             createLocalHouseSectionSensor(request);
+        }
+
+        if (request.getDeleted()) {
+            HouseSectionSensor houseSectionSensor = houseSectionSensorRepository.findById(request.getHouseSectionSensorId())
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION_SENSOR));
+
+            houseSectionSensor.softDelete(request.getDeletedAt());
         }
     }
 

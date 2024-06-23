@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -88,8 +89,23 @@ public class HouseService {
             throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
         }
 
-        // 하우스 소프트 삭제
-        house.softDelete();
+        SyncHouseRequest request = SyncHouseRequest.builder()
+                .houseId(house.getId())
+                .name(house.getName())
+                .houseVersion(house.getVersion())
+                .createdAt(house.getCreatedAt())
+                .updatedAt(house.getUpdatedAt())
+                .deletedAt(Instant.now())
+                .deleted(true)
+                .build();
+
+        Mqtt5Message message = Mqtt5Message.builder()
+                .method(UPSERT)
+                .uri("/localHouses")
+                .data(request)
+                .build();
+
+        mqttSender.send("request/%s".formatted(house.getId().toString()), message);
     }
 
     public FindAllHousesResponse findAllHouses() {

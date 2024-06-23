@@ -33,6 +33,9 @@ public class HouseSectionSensor extends IdentifiableSoftDeletableEntity {
     @Column(name = "sensor_model")
     private SensorModel sensorModel;
 
+    @Column(name = "port_name")
+    private String portName;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "house_section_id")
     private HouseSection houseSection;

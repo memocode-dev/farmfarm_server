@@ -21,7 +21,7 @@ public class HouseSectionSensorController {
 
     @PostMapping
     @Operation(summary = "하우스동 센서 생성", description = "하우스동 센서를 생성할 수 있습니다.")
-    public ResponseEntity<String> createHouseSection(
+    public ResponseEntity<String> createHouseSectionSensor(
             @PathVariable UUID houseId, @PathVariable UUID houseSectionId,
             @RequestBody CreateHouseSectionSensorForm form) {
         CreateHouseSectionSensorRequest request = CreateHouseSectionSensorRequest.builder()
@@ -39,9 +39,18 @@ public class HouseSectionSensorController {
         return ResponseEntity.created(URI.create(houseSectionSensorId.toString())).body(houseSectionSensorId.toString());
     }
 
+    @DeleteMapping("/{houseSectionSensorId}")
+    @Operation(summary = "하우스동 센서 삭제", description = "하우스동 센서를 삭제할 수 있습니다.")
+    public ResponseEntity<Void> deleteHouseSectionSensor(
+            @PathVariable UUID houseId, @PathVariable UUID houseSectionId, @PathVariable UUID houseSectionSensorId) {
+        houseSectionSensorService.deleteHouseSectionSensor(houseId, houseSectionId, houseSectionSensorId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/{houseSectionSensorId}/sync")
-    @Operation(summary = "하우스동 센서 동기화", description = "하우스동을 로컬서버에 동기화 할 수 있습니다.")
-    public ResponseEntity<Void> syncHouse(
+    @Operation(summary = "하우스동 센서 동기화", description = "하우스동 센서를 로컬서버에 동기화 할 수 있습니다.")
+    public ResponseEntity<Void> syncHouseSectionSensor(
             @PathVariable UUID houseId, @PathVariable UUID houseSectionId, @PathVariable UUID houseSectionSensorId) {
         houseSectionSensorService.syncHouseSectionSensor(houseId, houseSectionId, houseSectionSensorId);
 

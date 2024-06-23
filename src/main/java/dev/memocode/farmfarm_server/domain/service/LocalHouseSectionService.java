@@ -41,6 +41,13 @@ public class LocalHouseSectionService {
         } else {
             createLocalHouseSection(request);
         }
+
+        if (request.getDeleted()) {
+            HouseSection houseSection = houseSectionRepository.findById(request.getHouseSectionId())
+                    .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION));
+
+            houseSection.softDelete(request.getDeletedAt());
+        }
     }
 
     private LocalHouseSection updateLocalHouseSectionIfNecessary(LocalHouseSection localHouseSection, UpsertLocalHouseSectionRequest request) {

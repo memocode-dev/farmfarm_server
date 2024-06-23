@@ -11,6 +11,7 @@ public enum BaseErrorCode implements ErrorDetail {
     UNAUTHENTICATED("인증이 필요합니다.", WARNING),
     INTERNAL_SERVER_ERROR("서버 에러", CRITICAL),
     VALIDATION_ERROR("서버 에러", INFO),
+    DELETED_AT_NULL("deleted at null", INFO),
     ;
 
     private final String defaultMessage;
