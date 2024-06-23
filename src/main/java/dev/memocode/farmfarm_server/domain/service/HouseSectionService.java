@@ -124,12 +124,8 @@ public class HouseSectionService {
 
     public FindAllHouseSectionsResponse findAllHouseSections(
             @NotNull(message = "HOUSE_ID_NOT_NULL:house id cannot be null") UUID houseId) {
-        House house = houseRepository.findByIdAndDeleted(houseId, false)
+        houseRepository.findByIdAndDeleted(houseId, false)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
-
-        if (house.getSyncStatus() != SyncStatus.HEALTHY) {
-            throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
-        }
 
         List<HouseSection> houseSections = houseSectionRepository.findAllByHouseIdAndDeleted(houseId, false);
 
