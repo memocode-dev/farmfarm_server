@@ -75,6 +75,7 @@ public class HouseSectionSensor extends IdentifiableSoftDeletableEntity {
         return this.nameForAdmin.equals(this.localHouseSectionSensor.getNameForAdmin()) &&
                 this.nameForUser.equals(this.localHouseSectionSensor.getNameForUser()) &&
                 this.sensorModel.equals(this.localHouseSectionSensor.getSensorModel()) &&
+                this.portName.equals(this.localHouseSectionSensor.getPortName()) &&
                 this.version.equals(this.localHouseSectionSensor.getHouseSectionSensorVersion()) &&
                 this.getCreatedAt().equals(this.localHouseSectionSensor.getCreatedAt()) &&
                 this.getUpdatedAt().equals(this.localHouseSectionSensor.getUpdatedAt()) &&
