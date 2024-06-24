@@ -12,6 +12,7 @@ public enum BaseErrorCode implements ErrorDetail {
     INTERNAL_SERVER_ERROR("서버 에러", CRITICAL),
     VALIDATION_ERROR("서버 에러", INFO),
     DELETED_AT_NULL("deleted at null", INFO),
+    SYNC_FAILED("동기화 실패", CRITICAL),
     ;
 
     private final String defaultMessage;

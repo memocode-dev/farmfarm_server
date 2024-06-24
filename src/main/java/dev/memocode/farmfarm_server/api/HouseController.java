@@ -3,6 +3,7 @@ package dev.memocode.farmfarm_server.api;
 import dev.memocode.farmfarm_server.api.form.CreateHouseForm;
 import dev.memocode.farmfarm_server.api.form.UpdateHouseForm;
 import dev.memocode.farmfarm_server.domain.entity.SyncStatus;
+import dev.memocode.farmfarm_server.domain.exception.BusinessRuleViolationException;
 import dev.memocode.farmfarm_server.domain.service.HouseService;
 import dev.memocode.farmfarm_server.domain.service.request.CreateHouseRequest;
 import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseRequest;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
 import static dev.memocode.farmfarm_server.domain.entity.SyncStatus.HEALTHY;
+import static dev.memocode.farmfarm_server.domain.exception.BaseErrorCode.SYNC_FAILED;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,14 +65,14 @@ public class HouseController {
                     deferredResult.setResult(ResponseEntity.noContent().build());
                 }
             } catch (Exception e) {
-                deferredResult.setErrorResult(ResponseEntity.status(500).body("Internal server error occurred while syncing house section"));
+                deferredResult.setErrorResult(e);
             }
         }, Duration.ofMillis(1000));
 
         // 타임아웃 설정
         deferredResult.onTimeout(() -> {
             scheduledFuture.cancel(true);
-            deferredResult.setErrorResult(ResponseEntity.status(202).body("House edit is still in progress"));
+            deferredResult.setErrorResult(new BusinessRuleViolationException(SYNC_FAILED));
         });
 
         // 요청 완료 또는 취소 시 처리
@@ -94,14 +96,14 @@ public class HouseController {
                     deferredResult.setResult(ResponseEntity.noContent().build());
                 }
             } catch (Exception e) {
-                deferredResult.setErrorResult(ResponseEntity.status(500).body("Internal server error occurred while syncing house section"));
+                deferredResult.setErrorResult(e);
             }
         }, Duration.ofMillis(1000));
 
         // 타임아웃 설정
         deferredResult.onTimeout(() -> {
             scheduledFuture.cancel(true);
-            deferredResult.setErrorResult(ResponseEntity.status(202).body("House deletion is still in progress"));
+            deferredResult.setErrorResult(new BusinessRuleViolationException(SYNC_FAILED));
         });
 
         // 요청 완료 또는 취소 시 처리
