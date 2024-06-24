@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.*;
+import static dev.memocode.farmfarm_server.domain.exception.HouseSectionErrorCode.HOUSE_SECTION_REFERENCED;
 import static dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Method.UPSERT;
 
 @Service
@@ -87,6 +88,10 @@ public class HouseService {
 
         if (house.getSyncStatus() != SyncStatus.HEALTHY) {
             throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
+        }
+
+        if (house.isReferenced()) {
+            throw new BusinessRuleViolationException(HOUSE_REFERENCED);
         }
 
         SyncHouseRequest request = SyncHouseRequest.builder()

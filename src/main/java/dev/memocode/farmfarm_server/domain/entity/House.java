@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static java.time.temporal.ChronoUnit.MINUTES;
+import static lombok.AccessLevel.NONE;
 
 @Getter
 @Entity
@@ -34,6 +37,10 @@ public class House extends IdentifiableSoftDeletableEntity {
     @Version
     @Column(name = "version", nullable = false)
     private Long version;
+
+    @OneToMany(mappedBy = "house")
+    @Getter(NONE)
+    private List<HouseSection> houseSections = new ArrayList<>();
 
     public void changeName(String name) {
         this.name = name;
@@ -70,5 +77,17 @@ public class House extends IdentifiableSoftDeletableEntity {
                 this.getUpdatedAt().equals(this.localHouse.getUpdatedAt()) &&
                 this.getDeleted().equals(this.localHouse.getDeleted()) &&
                 (!this.getDeleted() || this.getDeletedAt().equals(this.localHouse.getDeletedAt()));
+    }
+
+    public boolean isReferenced() {
+        return !getHouseSections(false).isEmpty();
+    }
+
+    private List<HouseSection> getHouseSections(boolean withDeleted) {
+        return withDeleted ?
+                this.houseSections :
+                this.houseSections.stream()
+                        .filter(houseSection -> !houseSection.getDeleted())
+                        .toList();
     }
 }

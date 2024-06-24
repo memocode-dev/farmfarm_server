@@ -28,8 +28,7 @@ import java.util.UUID;
 
 import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.NOT_FOUND_HOUSE;
 import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.NOT_HEALTHY_HOUSE;
-import static dev.memocode.farmfarm_server.domain.exception.HouseSectionErrorCode.INVALID_HOUSE_SECTION_RELATION;
-import static dev.memocode.farmfarm_server.domain.exception.HouseSectionErrorCode.NOT_FOUND_HOUSE_SECTION;
+import static dev.memocode.farmfarm_server.domain.exception.HouseSectionErrorCode.*;
 import static dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Method.UPSERT;
 
 @Service
@@ -101,6 +100,10 @@ public class HouseSectionService {
 
         if (!houseSection.getHouse().equals(house)) {
             throw new BusinessRuleViolationException(INVALID_HOUSE_SECTION_RELATION);
+        }
+
+        if (houseSection.isReferenced()) {
+            throw new BusinessRuleViolationException(HOUSE_SECTION_REFERENCED);
         }
 
         SyncHouseSectionRequest request = SyncHouseSectionRequest.builder()

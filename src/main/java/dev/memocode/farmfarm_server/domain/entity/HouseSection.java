@@ -11,6 +11,7 @@ import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static java.time.temporal.ChronoUnit.MINUTES;
+import static lombok.AccessLevel.NONE;
 
 @Getter
 @Entity
@@ -37,6 +38,7 @@ public class HouseSection extends IdentifiableSoftDeletableEntity {
 
     @OneToMany(mappedBy = "houseSection")
     @Builder.Default
+    @Getter(NONE)
     private List<HouseSectionSensor> houseSectionSensors = new ArrayList<>();
 
     public void changeSectionNumber(Integer sectionNumber) {
@@ -74,5 +76,17 @@ public class HouseSection extends IdentifiableSoftDeletableEntity {
                 this.getUpdatedAt().equals(this.localHouseSection.getUpdatedAt()) &&
                 this.getDeleted().equals(this.localHouseSection.getDeleted()) &&
                 (!this.getDeleted() || this.getDeletedAt().equals(this.localHouseSection.getDeletedAt()));
+    }
+
+    public boolean isReferenced() {
+        return !getHouseSectionSensors(false).isEmpty();
+    }
+
+    private List<HouseSectionSensor> getHouseSectionSensors(boolean withDeleted) {
+        return withDeleted ?
+                this.houseSectionSensors :
+                this.houseSectionSensors.stream()
+                        .filter(houseSectionSensor -> !houseSectionSensor.getDeleted())
+                        .toList();
     }
 }
