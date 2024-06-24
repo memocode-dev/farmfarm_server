@@ -16,7 +16,7 @@ public enum SensorModel {
     XY_MD02(new SensorModelInfo("XY_MD02", "온습도 센서",
             List.of(new MeasurementDetails(TEMPERATURE, CELSIUS), new MeasurementDetails(HUMIDITY, PERCENT)))),
     DS18B20(new SensorModelInfo("DS18B20", "온도 센서",
-            List.of(new MeasurementDetails(TEMPERATURE, CELSI
+            List.of(new MeasurementDetails(TEMPERATURE, CELSIUS)))),
     ;
 
     private final SensorModelInfo modelInfo;
