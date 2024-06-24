@@ -1,9 +1,9 @@
-name: farmfarm_server_dev
+name: farmfarm_server_prod
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 permissions: write-all
 
@@ -44,6 +44,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/memocode-dev/farmfarm-server:${{ needs.tag.outputs.tag_name }}
+            ghcr.io/memocode-dev/farmfarm-server:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
   release:
@@ -88,4 +89,4 @@ jobs:
           echo "$KUBE_CONFIG_DATA" | base64 -d > $HOME/.kube/config
       - name: 버전 변경
         run: |
-          kubectl set image deployment/dev-farmfarm-server spring-boot=ghcr.io/memocode-dev/farmfarm-server:${{ needs.tag.outputs.tag_name }} --namespace=dev
+          kubectl set image deployment/prod-farmfarm-server spring-boot=ghcr.io/memocode-dev/farmfarm-server:${{ needs.tag.outputs.tag_name }} --namespace=prod
