@@ -14,7 +14,6 @@ import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static java.time.temporal.ChronoUnit.MINUTES;
-import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter

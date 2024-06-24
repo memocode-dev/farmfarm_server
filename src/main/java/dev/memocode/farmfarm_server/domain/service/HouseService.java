@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static dev.memocode.farmfarm_server.domain.exception.HouseErrorCode.*;
-import static dev.memocode.farmfarm_server.domain.exception.HouseSectionErrorCode.HOUSE_SECTION_REFERENCED;
 import static dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Method.UPSERT;
 
 @Service
