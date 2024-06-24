@@ -12,6 +12,7 @@ import java.util.List;
 import static jakarta.persistence.FetchType.LAZY;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @Entity
@@ -38,7 +39,7 @@ public class HouseSection extends IdentifiableSoftDeletableEntity {
 
     @OneToMany(mappedBy = "houseSection")
     @Builder.Default
-    @Getter(NONE)
+    @Getter(PRIVATE)
     private List<HouseSectionSensor> houseSectionSensors = new ArrayList<>();
 
     public void changeSectionNumber(Integer sectionNumber) {
