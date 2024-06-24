@@ -161,6 +161,7 @@ public class HouseSectionSensorService {
                 .nameForAdmin(houseSectionSensor.getNameForAdmin())
                 .nameForUser(houseSectionSensor.getNameForUser())
                 .sensorModel(houseSectionSensor.getSensorModel())
+                .portName(houseSectionSensor.getPortName()gi)
                 .createdAt(houseSectionSensor.getCreatedAt())
                 .updatedAt(houseSectionSensor.getUpdatedAt())
                 .deletedAt(Instant.now())
