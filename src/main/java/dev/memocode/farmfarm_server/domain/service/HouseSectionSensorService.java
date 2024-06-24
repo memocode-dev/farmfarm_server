@@ -12,6 +12,7 @@ import dev.memocode.farmfarm_server.domain.repository.HouseSectionSensorReposito
 import dev.memocode.farmfarm_server.domain.service.request.CreateHouseSectionSensorRequest;
 import dev.memocode.farmfarm_server.domain.service.request.SyncHouseSectionSensorRequest;
 import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseSectionSensorRequest;
+import dev.memocode.farmfarm_server.domain.service.response.FindHouseSectionSensorResponse;
 import dev.memocode.farmfarm_server.mqtt.config.MqttSender;
 import dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Message;
 import jakarta.validation.Valid;
@@ -214,5 +215,25 @@ public class HouseSectionSensorService {
         if (request.getNameForUser() != null) {
             houseSectionSensor.changeNameForUser(request.getNameForUser());
         }
+    }
+
+    public FindHouseSectionSensorResponse findHouseSectionSensor(UUID houseSectionSensorId, boolean withDeleted) {
+        HouseSectionSensor houseSectionSensor = withDeleted ?
+                houseSectionSensorRepository.findById(houseSectionSensorId)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION_SENSOR)) :
+                houseSectionSensorRepository.findByIdAndDeleted(houseSectionSensorId, false)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION_SENSOR));
+
+        return FindHouseSectionSensorResponse.builder()
+                .id(houseSectionSensor.getId())
+                .nameForAdmin(houseSectionSensor.getNameForAdmin())
+                .nameForUser(houseSectionSensor.getNameForUser())
+                .portName(houseSectionSensor.getPortName())
+                .syncStatus(houseSectionSensor.getSyncStatus())
+                .createdAt(houseSectionSensor.getCreatedAt())
+                .updatedAt(houseSectionSensor.getUpdatedAt())
+                .deletedAt(houseSectionSensor.getDeletedAt())
+                .deleted(houseSectionSensor.getDeleted())
+                .build();
     }
 }

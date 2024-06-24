@@ -13,12 +13,12 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindHouseResponse {
+public class FindHouseSection {
     private UUID id;
-    private String name;
+    private Integer sectionNumber;
+    private SyncStatus syncStatus;
     private Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
     private Boolean deleted;
-    private SyncStatus syncStatus;
 }

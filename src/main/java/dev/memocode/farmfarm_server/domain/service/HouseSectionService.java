@@ -12,6 +12,7 @@ import dev.memocode.farmfarm_server.domain.service.request.CreateHouseSectionReq
 import dev.memocode.farmfarm_server.domain.service.request.SyncHouseSectionRequest;
 import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseSectionRequest;
 import dev.memocode.farmfarm_server.domain.service.response.FindAllHouseSectionsResponse;
+import dev.memocode.farmfarm_server.domain.service.response.FindHouseSection;
 import dev.memocode.farmfarm_server.mqtt.config.MqttSender;
 import dev.memocode.farmfarm_server.mqtt.dto.Mqtt5Message;
 import jakarta.validation.Valid;
@@ -137,14 +138,14 @@ public class HouseSectionService {
     public void syncHouseSection(
             @NotNull(message = "HOUSE_ID_NOT_NULL:house id cannot be null") UUID houseId,
             @NotNull(message = "HOUSE_SECTION_ID_NOT_NULL:house section id cannot be null") UUID houseSectionId) {
-        House house = houseRepository.findByIdAndDeleted(houseId, false)
+        House house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
 
         if (house.getSyncStatus() != SyncStatus.HEALTHY) {
             throw new BusinessRuleViolationException(NOT_HEALTHY_HOUSE);
         }
 
-        HouseSection houseSection = houseSectionRepository.findByIdAndDeleted(houseSectionId, false)
+        HouseSection houseSection = houseSectionRepository.findById(houseSectionId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION));
 
         if (!houseSection.getHouse().equals(house)) {
@@ -169,5 +170,23 @@ public class HouseSectionService {
                 .build();
 
         mqttSender.send("request/%s".formatted(house.getId().toString()), message);
+    }
+
+    public FindHouseSection findHouseSection(UUID houseSectionId, boolean withDeleted) {
+        HouseSection houseSection = withDeleted ?
+                houseSectionRepository.findById(houseSectionId)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION)) :
+                houseSectionRepository.findByIdAndDeleted(houseSectionId, false)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE_SECTION));
+
+        return FindHouseSection.builder()
+                .id(houseSection.getId())
+                .sectionNumber(houseSection.getSectionNumber())
+                .syncStatus(houseSection.getSyncStatus())
+                .createdAt(houseSection.getCreatedAt())
+                .updatedAt(houseSection.getUpdatedAt())
+                .deletedAt(houseSection.getDeletedAt())
+                .deleted(houseSection.getDeleted())
+                .build();
     }
 }

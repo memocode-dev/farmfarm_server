@@ -116,15 +116,20 @@ public class HouseService {
                 .build();
     }
 
-    public FindHouseResponse findHouse(@NotNull(message = "HOUSE_ID_NOT_NULL:house cannot be null") UUID houseId) {
-        House house = houseRepository.findByIdAndDeleted(houseId, false)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
+    public FindHouseResponse findHouse(@NotNull(message = "HOUSE_ID_NOT_NULL:house cannot be null") UUID houseId, boolean withDeleted) {
+        House house = withDeleted ?
+                houseRepository.findById(houseId)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE)) :
+                houseRepository.findByIdAndDeleted(houseId, false)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_HOUSE));
 
         return FindHouseResponse.builder()
                 .id(house.getId())
                 .name(house.getName())
                 .createdAt(house.getCreatedAt())
                 .updatedAt(house.getUpdatedAt())
+                .deletedAt(house.getDeletedAt())
+                .deleted(house.getDeleted())
                 .syncStatus(house.getSyncStatus())
                 .build();
     }
