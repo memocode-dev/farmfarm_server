@@ -105,7 +105,7 @@ public class HouseService {
                 .data(request)
                 .build();
 
-        mqttSender.send("request/%s".formatted(house.getId().toString()), message);
+        mqttSender.sendRequest(house.getId(), message);
     }
 
     public FindAllHousesResponse findAllHouses() {
@@ -154,6 +154,6 @@ public class HouseService {
                 .data(request)
                 .build();
 
-        mqttSender.send("request/%s".formatted(house.getId().toString()), message);
+        mqttSender.sendRequest(house.getId(), message);
     }
 }

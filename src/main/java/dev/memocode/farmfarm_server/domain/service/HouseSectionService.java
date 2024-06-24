@@ -120,7 +120,7 @@ public class HouseSectionService {
                 .data(request)
                 .build();
 
-        mqttSender.send("request/%s".formatted(house.getId().toString()), message);
+        mqttSender.sendRequest(house.getId(), message);
     }
 
     public FindAllHouseSectionsResponse findAllHouseSections(
@@ -169,7 +169,7 @@ public class HouseSectionService {
                 .data(request)
                 .build();
 
-        mqttSender.send("request/%s".formatted(house.getId().toString()), message);
+        mqttSender.sendRequest(house.getId(), message);
     }
 
     public FindHouseSection findHouseSection(UUID houseSectionId, boolean withDeleted) {
