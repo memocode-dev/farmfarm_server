@@ -83,7 +83,7 @@ public class HouseSection extends IdentifiableSoftDeletableEntity {
         return !getHouseSectionSensors(false).isEmpty();
     }
 
-    private List<HouseSectionSensor> getHouseSectionSensors(boolean withDeleted) {
+    public List<HouseSectionSensor> getHouseSectionSensors(boolean withDeleted) {
         return withDeleted ?
                 this.houseSectionSensors :
                 this.houseSectionSensors.stream()

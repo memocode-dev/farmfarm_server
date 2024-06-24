@@ -21,10 +21,9 @@ public class HouseSectionConverter {
 
     public FindAllHouseSectionsResponse__HouseSection toFindAllHouseSectionsResponse__HouseSection(
             HouseSection houseSection) {
-        List<HouseSectionSensor> houseSectionSensors = houseSection.getHouseSectionSensors();
+        List<HouseSectionSensor> houseSectionSensors = houseSection.getHouseSectionSensors(false);
 
         List<FindAllHouseSectionsResponse__HouseSectionSensor> sensors = houseSectionSensors.stream()
-                .filter(houseSectionSensor -> !houseSectionSensor.getDeleted())
                 .map(houseSectionSensor -> {
                     SensorModel sensorModel = houseSectionSensor.getSensorModel();
                     SensorModelInfo modelInfo = sensorModel.getModelInfo();
