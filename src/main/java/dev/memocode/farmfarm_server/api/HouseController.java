@@ -10,6 +10,7 @@ import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseRequest;
 import dev.memocode.farmfarm_server.domain.service.response.FindAllHousesResponse;
 import dev.memocode.farmfarm_server.domain.service.response.FindHouseResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import static dev.memocode.farmfarm_server.domain.exception.BaseErrorCode.SYNC_F
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/houses")
+@SecurityRequirement(name = "bearer-key")
 @Tag(name = "houses", description = "하우스")
 public class HouseController {
     private final HouseService houseService;

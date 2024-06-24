@@ -13,7 +13,12 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 100
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:SECRET}
+          jwk-set-uri: ${JWK_SET_URI:SECRET}
   flyway:
     locations: classpath:db/migration
     enabled: true

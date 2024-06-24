@@ -9,6 +9,7 @@ import dev.memocode.farmfarm_server.domain.service.request.CreateHouseSectionSen
 import dev.memocode.farmfarm_server.domain.service.request.UpdateHouseSectionSensorRequest;
 import dev.memocode.farmfarm_server.domain.service.response.FindHouseSectionSensorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import static dev.memocode.farmfarm_server.domain.exception.BaseErrorCode.SYNC_F
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/houses/{houseId}/sections/{houseSectionId}/sensors")
+@SecurityRequirement(name = "bearer-key")
 @Tag(name = "houses", description = "하우스")
 public class HouseSectionSensorController {
     private final HouseSectionSensorService houseSectionSensorService;

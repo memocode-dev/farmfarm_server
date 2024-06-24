@@ -1,0 +1,4 @@
+custom:
+  front:
+    domain: "http://localhost:3000"
+    domain2: "http://localhost:3000"

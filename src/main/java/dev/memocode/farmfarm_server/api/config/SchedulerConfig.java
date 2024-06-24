@@ -10,8 +10,8 @@ public class SchedulerConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(10); // 스레드 풀의 크기 설정
-        scheduler.setThreadNamePrefix("TaskScheduler-");
+        scheduler.setPoolSize(10);
+        scheduler.setThreadNamePrefix("ThreadPoolTaskScheduler-");
         scheduler.initialize();
         return scheduler;
     }

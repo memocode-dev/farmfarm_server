@@ -1,0 +1,9 @@
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+custom:
+  front:
+    domain: "http://localhost:3000"
+    domain2: "http://localhost:3000"

@@ -8,6 +8,7 @@ import dev.memocode.farmfarm_server.domain.service.request.UpdateOrganizationReq
 import dev.memocode.farmfarm_server.domain.service.response.FindAllOrganizationsResponse;
 import dev.memocode.farmfarm_server.domain.service.response.FindOrganizationResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/organizations")
+@SecurityRequirement(name = "bearer-key")
 @Tag(name = "organizations", description = "조직")
 public class OrganizationController {
     private final OrganizationService organizationService;

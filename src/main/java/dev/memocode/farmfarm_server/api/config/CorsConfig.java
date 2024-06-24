@@ -1,5 +1,6 @@
 package dev.memocode.farmfarm_server.api.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -13,13 +14,20 @@ import java.util.Set;
 
 @Configuration
 public class CorsConfig {
+    @Value("${custom.front.domain}")
+    private String frontDomain;
+
+    @Value("${custom.front.domain2}")
+    private String frontDomain2;
+
     @Bean
     @Primary
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         Set<String> origins = new HashSet<>();
-        origins.add("http://localhost:3000");
+        origins.add(frontDomain);
+        origins.add(frontDomain2);
         configuration.setAllowedOrigins(origins.stream().toList());
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
