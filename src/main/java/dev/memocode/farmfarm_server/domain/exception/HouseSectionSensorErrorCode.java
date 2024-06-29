@@ -10,6 +10,7 @@ public enum HouseSectionSensorErrorCode implements ErrorDetail {
     NOT_FOUND_HOUSE_SECTION_SENSOR("하우스동 센서를 찾을 수 없습니다.", INFO),
     INVALID_HOUSE_SECTION_SENSOR_RELATION(
             "The house section sensor does not belong to the specified house section", INFO),
+    SENSOR_NOT_REGISTERED_LOCALLY("로컬 서버에 센서가 등록되지 않았습니다.", INFO),
     ;
 
     ;
