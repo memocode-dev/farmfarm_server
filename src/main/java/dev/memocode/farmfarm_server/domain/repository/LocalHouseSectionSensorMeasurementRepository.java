@@ -1,9 +1,10 @@
 package dev.memocode.farmfarm_server.domain.repository;
 
-import dev.memocode.farmfarm_server.domain.entity.LocalHouseSectionSensor;
 import dev.memocode.farmfarm_server.domain.entity.LocalHouseSectionSensorMeasurement;
 import dev.memocode.farmfarm_server.domain.entity.MeasurementType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
@@ -18,6 +19,16 @@ public interface LocalHouseSectionSensorMeasurementRepository
     Optional<LocalHouseSectionSensorMeasurement> findTopByLocalHouseSectionSensorIdAndMeasurementTypeOrderByMeasuredAtDesc(
             UUID houseSectionSensorId, MeasurementType measurementType);
 
-    List<LocalHouseSectionSensorMeasurement> findAllSensorDataByLocalHouseSectionSensorAndMeasuredAtBetween(
-            LocalHouseSectionSensor localHouseSectionSensor, Instant startMeasuredAt, Instant endMeasuredAt);
+    @Query(value = "SELECT date_trunc('minute', measured_at) - interval '1 minute' * (extract(minute from measured_at)::int % 5) AS interval_start, " +
+            "m.measurement_type, " +
+            "AVG(m.value) AS avg_value " +
+            "FROM local_house_section_sensor_measurements m " +
+            "WHERE m.local_house_section_sensor_id = :sensorId " +
+            "AND m.measured_at BETWEEN :start AND :end " +
+            "GROUP BY m.measurement_type, interval_start " +
+            "ORDER BY interval_start, m.measurement_type", nativeQuery = true)
+    List<Object[]> findAverageAllSensorDataByLocalHouseSectionSensorAndMeasuredAtBetween(
+            @Param("sensorId") UUID sensorId,
+            @Param("start") Instant startMeasuredAt,
+            @Param("end") Instant endMeasuredAt);
 }

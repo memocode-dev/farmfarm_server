@@ -2,10 +2,7 @@ package dev.memocode.farmfarm_server.domain.entity;
 
 import dev.memocode.farmfarm_server.domain.base_entity.IdentifiableSoftDeletableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
@@ -39,6 +36,7 @@ public class House extends IdentifiableSoftDeletableEntity {
     private Long version;
 
     @OneToMany(mappedBy = "house")
+    @Builder.Default
     @Getter(PRIVATE)
     private List<HouseSection> houseSections = new ArrayList<>();
 
